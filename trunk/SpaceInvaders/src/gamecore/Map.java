@@ -9,6 +9,8 @@ public class Map {
     private Mob mobGrid[][];
 
     private int mostLeftColumn, mostRightColumn, lowestRow;
+
+
     private int playerBulletsFired;
 
 
@@ -33,7 +35,40 @@ public class Map {
         //sätt givna position i mobGrind[x][y] till null
     }
 
-    
+    public void setLowestRow(int lowestRow) {
+        this.lowestRow = lowestRow;
+    }
 
+    public void setMobsAlive(int mobsAlive) {
+        this.mobsAlive = mobsAlive;
+    }
+
+    public void setMostLeftColumn(int mostLeftColumn) {
+        this.mostLeftColumn = mostLeftColumn;
+    }
+
+    public void setMostRightColumn(int mostRightColumn) {
+        this.mostRightColumn = mostRightColumn;
+    }
+
+    public void setPlayerBulletsFired(int playerBulletsFired) {
+        this.playerBulletsFired = playerBulletsFired;
+    }
+
+    public int getLowestRow() {
+        return lowestRow;
+    }
+
+    public int getMostLeftColumn() {
+        return mostLeftColumn;
+    }
+
+    public int getMostRightColumn() {
+        return mostRightColumn;
+    }
+
+    public int getPlayerBulletsFired() {
+        return playerBulletsFired;
+    }
 
 }
