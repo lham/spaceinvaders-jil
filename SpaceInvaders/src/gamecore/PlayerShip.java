@@ -5,10 +5,8 @@ package gamecore;
  *
  * @author Isak
  */
-public class PlayerShip {
-    private int position, speed;
-    private int modelHeight, modelWidth;
-    private int impactArea;
+public class PlayerShip extends ViewableObject {
+    private int speed;
     boolean hasActiveProjectile;
 
     public PlayerShip() {
