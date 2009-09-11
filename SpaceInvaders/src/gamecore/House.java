@@ -4,8 +4,7 @@ package gamecore;
  *
  * @author Linus
  */
-public class House {
-    private int xPos;
+public class House extends ViewableObject{
     private int health;
     //private Area houseSections[];
 
