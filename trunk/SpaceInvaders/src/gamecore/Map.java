@@ -19,13 +19,7 @@ public class Map {
         //initera variabler osv
     }
 
-    public int getMobsAlive(){
-        //returnera mobsAlive
-    }
 
-    public void setMobsAlive(){
-        //sätt mobsAlive
-    }
 
     public void fillMobGrid(){
         //skapa ny mob i varje plats av arrayen
@@ -55,6 +49,10 @@ public class Map {
         this.playerBulletsFired = playerBulletsFired;
     }
 
+    public void setMobsAlive(){
+        //sätt mobsAlive
+    }
+    
     public int getLowestRow() {
         return lowestRow;
     }
@@ -71,4 +69,8 @@ public class Map {
         return playerBulletsFired;
     }
 
+    public int getMobsAlive(){
+        return this.mobsAlive;
+    }
+    
 }
