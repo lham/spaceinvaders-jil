@@ -2,5 +2,7 @@
 package gamecore;
 
 public class ViewableObject {
-    private int yPos, xPos, modelHeight, modelWidt, impactArea;
+    private Area impactArea;
+    private Coordinate position;
+    private int modelHeight, modelWidth;
 }

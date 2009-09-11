@@ -25,22 +25,6 @@ public class PlayerShip extends ViewableObject {
         return hasActiveProjectile;
     }
 
-    public int getImpactArea() {
-        return impactArea;
-    }
-
-    public int getModelHeight() {
-        return modelHeight;
-    }
-
-    public int getModelWidth() {
-        return modelWidth;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
     public int getSpeed() {
         return speed;
     }
