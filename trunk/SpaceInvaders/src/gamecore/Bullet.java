@@ -5,11 +5,8 @@ package gamecore;
  *
  * @author Isak
  */
-public class Bullet {
+public class Bullet extends ViewableObject{
     private int speed, direction;
-    private int positionX, positionY;
-    private int modelHeight, modelWidth;
-    private int impactArea;
 
     public Bullet() {
         //konstruktor
