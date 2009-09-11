@@ -33,22 +33,6 @@ public class PlayerShip extends ViewableObject {
         this.hasActiveProjectile = hasActiveProjectile;
     }
 
-    public void setImpactArea(int impactArea) {
-        this.impactArea = impactArea;
-    }
-
-    public void setModelHeight(int modelHeight) {
-        this.modelHeight = modelHeight;
-    }
-
-    public void setModelWidth(int modelWidth) {
-        this.modelWidth = modelWidth;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public void setSpeed(int speed) {
         this.speed = speed;
     }
