@@ -1,8 +1,17 @@
 
 package gamecore;
 
-public class ViewableObject {
+import java.awt.Graphics2D;
+
+public abstract class ViewableObject {
     private Area impactArea;
     private Coordinate position;
-    private int modelHeight, modelWidth;
+    
+    public ViewableObject(Area impactArea, Coordinate startPos){
+        this.impactArea = impactArea;
+        this.position = startPos;
+    }
+
+    public abstract void drawObject(Graphics2D g);
+
 }
