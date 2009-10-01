@@ -11,14 +11,14 @@ public class Game {
     //private Score currentScore;
 
     public void startNewGame(){
-        //stara spel på något sätt
+        //start game somehow
     }
 
     public void gameOver(){
-        //spara highscore
+        //save highscore
     }
 
-    //Fler funktioner
+    //Several more methods
 
 
 }

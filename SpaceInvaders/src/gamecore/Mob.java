@@ -1,9 +1,18 @@
 package gamecore;
-
-public class Mob {
+/**
+ *
+ * @author Jon
+ */
+public class Mob extends ViewableObject {
     private int speed;  //The speed in pixels/sec
     private int value; // The amount of points earned by killing the mob
     private int direction; //The direction of the mob
+
+
+    public Mob(int hight){
+        //constructor
+
+    }
 
     public void setDirection(int direction) {
         this.direction = direction;
