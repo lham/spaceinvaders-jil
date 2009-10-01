@@ -7,11 +7,15 @@ package gamecore;
 public class Game {
     private int level;
     private int playerLives;
-    private boolean isPaused;
+    private boolean isPaused, isStarted;
+    private Map map;
     //private Score currentScore;
 
     public void startNewGame(){
         //start game somehow
+        map = new Map();
+        map.fillMobGrid();
+
     }
 
     public void gameOver(){

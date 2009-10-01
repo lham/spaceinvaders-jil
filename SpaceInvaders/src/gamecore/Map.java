@@ -6,55 +6,59 @@ package gamecore;
  */
 public class Map {
     private int mobsAlive;
-    private Mob mobGrid[][] = new Mob[10][4];
+    private Mob mobGrid[][] = new Mob[5][11]; //[rows][columns]
 
     private int mostLeftColumn, mostRightColumn, lowestRow;
-    private int mobDirection;
+    private Direction mobDirection;
     private int playerBulletsFired;
 
-
+    /**
+     * Constuctor
+     */
     public Map(){
-        //konstruktor
-        //initera variabler osv
+        this.mobsAlive = 0;
+        this.mobDirection = Direction.RIGHT; //the direction the mobs move in when the game starts
+        this.playerBulletsFired = 0;
+        this.mostLeftColumn = 1;
+        this.mostRightColumn = 11;
+        this.lowestRow = 5;
     }
 
 
 
+    /**
+     * Create 55 new mobs
+     */
     public void fillMobGrid(){
-        //skapa ny mob i varje plats av arrayen
-        for (int y = 0; y < mobGrid.length; y++) {
-            for (int x = 0; x < mobGrid[y].length; x++) {
-                mobGrid[x][y] = new Mob(y);
+        for (int y = 0; y < this.mobGrid.length; y++) {
+            for (int x = 0; x < this.mobGrid[y].length; x++) {
+                this.mobGrid[y][x] = new Mob(this.mobGrid[y].length - y);
+                this.mobsAlive++;
             }
         }
     }
 
+    /**
+     * Removes a mob from the mobGrid[y][x]
+     * @param x x-pos
+     * @param y y-pos
+     */
     public void killMob(int x, int y){
-        //sätt givna position i mobGrind[x][y] till null
+        //Remove the mob
+        this.mobGrid[y][x] = null;
+        this.mobsAlive--;
+
+        //Check if the extreme rows/columns/rows changed
+        //row
+        for (int yy = 0; yy < mobGrid.length; yy++) {
+
+        }
+
     }
 
-    public void setLowestRow(int lowestRow) {
-        this.lowestRow = lowestRow;
-    }
 
-    public void setMobsAlive(int mobsAlive) {
-        this.mobsAlive = mobsAlive;
-    }
-
-    public void setMostLeftColumn(int mostLeftColumn) {
-        this.mostLeftColumn = mostLeftColumn;
-    }
-
-    public void setMostRightColumn(int mostRightColumn) {
-        this.mostRightColumn = mostRightColumn;
-    }
-
-    public void setPlayerBulletsFired(int playerBulletsFired) {
-        this.playerBulletsFired = playerBulletsFired;
-    }
-
-    public void setMobsAlive(){
-        //sätt mobsAlive
+    public void increasePlayerBulletsFired() {
+        this.playerBulletsFired++;
     }
     
     public int getLowestRow() {
