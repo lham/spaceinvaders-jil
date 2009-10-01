@@ -6,11 +6,10 @@ package gamecore;
  */
 public class Map {
     private int mobsAlive;
-    private Mob mobGrid[][];
+    private Mob mobGrid[][] = new Mob[10][4];
 
     private int mostLeftColumn, mostRightColumn, lowestRow;
-
-
+    private int mobDirection;
     private int playerBulletsFired;
 
 
@@ -23,6 +22,11 @@ public class Map {
 
     public void fillMobGrid(){
         //skapa ny mob i varje plats av arrayen
+        for (int y = 0; y < mobGrid.length; y++) {
+            for (int x = 0; x < mobGrid[y].length; x++) {
+                mobGrid[x][y] = new Mob(y);
+            }
+        }
     }
 
     public void killMob(int x, int y){
