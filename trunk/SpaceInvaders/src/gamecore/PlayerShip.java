@@ -10,15 +10,15 @@ public class PlayerShip extends ViewableObject {
     boolean hasActiveProjectile;
 
     public PlayerShip() {
-        //konstruktor
+        //construktor
     }
 
     public void fireBullet() {
-        //avfyra ett skott
+        //fire a bullet
     }
 
     public void moveShip() {
-        //flytta skeppet
+        //move the ship
     }
 
     public boolean isHasActiveProjectile() {
