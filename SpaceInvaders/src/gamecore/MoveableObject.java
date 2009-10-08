@@ -10,5 +10,5 @@ package gamecore;
  * @author Linus
  */
 public interface MoveableObject {
-    public void moveObject(int time);
+    public void moveObject(long time);
 }

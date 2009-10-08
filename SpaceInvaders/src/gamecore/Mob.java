@@ -46,7 +46,7 @@ public class Mob extends ViewableObject implements MoveableObject{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void moveObject(int time) {
+    public void moveObject(long time) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

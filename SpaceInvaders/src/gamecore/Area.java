@@ -217,4 +217,8 @@ public class Area {
             return true;
         }
     }
+
+    public static boolean areaInArea(Area collidingArea, Area checkArea){
+        return true;
+    }
 }

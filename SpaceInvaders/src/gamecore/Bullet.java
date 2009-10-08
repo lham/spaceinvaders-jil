@@ -8,22 +8,16 @@ import java.awt.Graphics2D;
  * @author Isak
  */
 public class Bullet extends ViewableObject implements MoveableObject{
-    private int speed, direction;
+    private int speed; 
+    private Direction direction;
 
-    public Bullet() {
+    public Bullet(Direction direction, Coordinate spawnCoord) {
         //konstruktor
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
+        super(new Area(spawnCoord, new Coordinate(spawnCoord.getX(), spawnCoord.getY()+5)));
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public int getDirection() {
-        return direction;
+        this.speed = speed; 
     }
 
     public int getSpeed() {
@@ -32,10 +26,10 @@ public class Bullet extends ViewableObject implements MoveableObject{
 
     @Override
     public void drawObject(Graphics2D g) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    public void moveObject(int time) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void moveObject(long time) {
+        super.getArea().moveArea(0, this.speed*time);
     }
 }

@@ -4,14 +4,17 @@ package gamecore;
 import java.awt.Graphics2D;
 
 public abstract class ViewableObject {
-    private Area impactArea;
-    private Coordinate position;
+    private Area area;
     
-    public ViewableObject(Area impactArea, Coordinate startPos){
-        this.impactArea = impactArea;
-        this.position = startPos;
+    public ViewableObject(Area area){
+        this.area = area;
     }
 
     public abstract void drawObject(Graphics2D g);
 
+    public Area getArea(){
+        return this.area;
+    }
+
 }
+
