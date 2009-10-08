@@ -72,7 +72,6 @@ public class Area {
     public Coordinate getTopLeftCorner(){
         return new Coordinate(this.lowLeftCorner.getX(), this.topRightCorner.getY());
     }
-
     /**
      * Set the position of the lowLeftCorner.
      * @param newX The new x-value.

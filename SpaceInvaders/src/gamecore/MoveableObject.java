@@ -9,6 +9,6 @@ package gamecore;
  *
  * @author Linus
  */
-public interface MovableObject {
-    public void moveObject();
+public interface MoveableObject {
+    public void moveObject(int time);
 }
