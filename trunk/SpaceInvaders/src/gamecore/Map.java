@@ -12,6 +12,8 @@ public class Map {
     private Direction mobDirection;
     private int playerBulletsFired;
 
+    private int timeBuffert;
+
     /**
      * Constuctor
      */
@@ -30,9 +32,13 @@ public class Map {
      * Create 55 new mobs
      */
     public void fillMobGrid(){
+        //loop thru all positions
         for (int y = 0; y < this.mobGrid.length; y++) {
             for (int x = 0; x < this.mobGrid[y].length; x++) {
+                //Create a mobs and send in the level (y-pos)
                 this.mobGrid[y][x] = new Mob(this.mobGrid[y].length - y);
+
+                //Add mob to mobsAlive
                 this.mobsAlive++;
             }
         }
@@ -56,6 +62,16 @@ public class Map {
 
     }
 
+    public void moveAllMobs(int time){
+        //loop thru all positions
+        for (int y = 0; y < this.mobGrid.length; y++) {
+            for (int x = 0; x < this.mobGrid[y].length; x++) {
+                if(this.mobGrid[y][x] != null){
+                    this.mobGrid[y][x].moveObject(this.mobDirection)
+                }
+            }
+        }
+    }
 
     public void increasePlayerBulletsFired() {
         this.playerBulletsFired++;
@@ -79,6 +95,10 @@ public class Map {
 
     public int getMobsAlive(){
         return this.mobsAlive;
+    }
+
+    public int getTimeBuffert(){
+        return this.timeBuffert;
     }
     
 }

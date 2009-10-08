@@ -1,11 +1,13 @@
 
 package gamecore;
 
+import java.awt.Graphics2D;
+
 /**
  *
  * @author Isak
  */
-public class Bullet extends ViewableObject{
+public class Bullet extends ViewableObject implements MoveableObject{
     private int speed, direction;
 
     public Bullet() {
@@ -26,5 +28,14 @@ public class Bullet extends ViewableObject{
 
     public int getSpeed() {
         return speed;
+    }
+
+    @Override
+    public void drawObject(Graphics2D g) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void moveObject(int time) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
