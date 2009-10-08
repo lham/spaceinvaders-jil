@@ -67,7 +67,7 @@ public class Map {
         for (int y = 0; y < this.mobGrid.length; y++) {
             for (int x = 0; x < this.mobGrid[y].length; x++) {
                 if(this.mobGrid[y][x] != null){
-                    this.mobGrid[y][x].moveObject(this.mobDirection)
+                    this.mobGrid[y][x].moveObject(this.mobDirection, time)
                 }
             }
         }

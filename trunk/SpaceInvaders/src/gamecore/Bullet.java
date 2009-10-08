@@ -17,7 +17,7 @@ public class Bullet extends ViewableObject implements MoveableObject{
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed; 
+        this.speed = speed; //100px/s  0.1px/ms
     }
 
     public int getSpeed() {
