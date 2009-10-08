@@ -35,7 +35,7 @@ public class Map {
         //loop thru all positions
         for (int y = 0; y < this.mobGrid.length; y++) {
             for (int x = 0; x < this.mobGrid[y].length; x++) {
-                //Create a mobs and send in the level (y-pos)
+                //Create a mobs and send in the level (y-pos in the grid)
                 this.mobGrid[y][x] = new Mob(this.mobGrid[y].length - y);
 
                 //Add mob to mobsAlive
@@ -62,7 +62,7 @@ public class Map {
 
     }
 
-    public void moveAllMobs(int time){
+    public void moveAllMobs(long time){
         //loop thru all positions
         for (int y = 0; y < this.mobGrid.length; y++) {
             for (int x = 0; x < this.mobGrid[y].length; x++) {
@@ -100,5 +100,7 @@ public class Map {
     public int getTimeBuffert(){
         return this.timeBuffert;
     }
+
+
     
 }
