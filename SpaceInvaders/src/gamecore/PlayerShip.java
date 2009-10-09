@@ -23,7 +23,7 @@ public class PlayerShip extends ViewableObject implements MoveableObject{
         //move the ship
     }
 
-    public boolean isHasActiveProjectile() {
+    public boolean hasActiveProjectile() {
         return hasActiveProjectile;
     }
 

@@ -1,5 +1,7 @@
 package gamecore;
 
+import java.util.LinkedList;
+
 /**
  * Area contains information about a square area of pixels on the screen. The
  * area must have 4 corners which each are 90 degrees. Requires the Coordinate
@@ -218,7 +220,7 @@ public class Area {
         }
     }
 
-    public static boolean areaInArea(Area collidingArea, Area checkArea){
+    public static boolean areaInArea(Area areaBullet){
         return true;
     }
 }
