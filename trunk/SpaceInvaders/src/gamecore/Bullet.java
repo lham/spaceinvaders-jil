@@ -24,6 +24,10 @@ public class Bullet extends ViewableObject implements MoveableObject{
         return speed;
     }
 
+    public Area getArea() {
+        return super.getArea();
+    }
+
     @Override
     public void drawObject(Graphics2D g) {
         

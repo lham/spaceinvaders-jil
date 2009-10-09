@@ -1,5 +1,7 @@
 package gamecore;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author Linus
@@ -10,6 +12,8 @@ public class Game {
     private long lastupdate;
     private boolean isPaused, isStarted;
     private Map map;
+    private LinkedList<Bullet> mobBullets = new LinkedList();
+    private PlayerShip ship;
     //private Score currentScore;
 
     public void startNewGame(){
@@ -17,6 +21,7 @@ public class Game {
         this.map = new Map();
         this.map.fillMobGrid();
         this.gameloop();
+        this.ship = new PlayerShip();
     }
 
     public void gameOver(){
@@ -32,7 +37,19 @@ public class Game {
             this.lastupdate = System.currentTimeMillis();
 
             //Check for killed objects
-            Area.areaInArea(null, null);
+            int i = 0;
+            for (i = 0; i < mobBullets.size(); i++) {
+                 if(Area.areaInArea(mobBullets.get(i).getArea()/*Player area*/)) {
+                    //Bullet collide with plyership
+                 }
+            }
+
+            if(ship.hasActiveProjectile()) {
+                int j = 0;
+                for (j = 0; j < ; j++) {
+                    
+                }
+            }
             //if bullet has collided with object => kill object and the bullet
             //if bullet outside of screen => remove
 
