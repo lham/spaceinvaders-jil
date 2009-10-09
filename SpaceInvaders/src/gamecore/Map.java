@@ -9,7 +9,11 @@ public class Map {
     private Mob mobGrid[][] = new Mob[5][11]; //[rows][columns]
 
     private int mostLeftColumn, mostRightColumn, lowestRow;
+
     private Direction mobDirection;
+    private int speed; //px/sek
+
+
     private int playerBulletsFired;
 
     private int timeBuffert;
@@ -24,6 +28,7 @@ public class Map {
         this.mostLeftColumn = 1;
         this.mostRightColumn = 11;
         this.lowestRow = 5;
+        this.speed = 10;
     }
 
 
@@ -35,8 +40,11 @@ public class Map {
         //loop thru all positions
         for (int y = 0; y < this.mobGrid.length; y++) {
             for (int x = 0; x < this.mobGrid[y].length; x++) {
-                //Create a mobs and send in the level (y-pos in the grid)
-                this.mobGrid[y][x] = new Mob(this.mobGrid[y].length - y);
+                //Create a mobs and send in the level (y-pos in the grid), and spawn position
+                this.mobGrid[y][x] = new Mob(this.mobGrid[y].length - y,
+          //Bör bytas mot param1: 50+y*(mobGraphic.getHeight()+10) där 10 = padding mellan mobs
+                        //param2: ((totalWidth-(mobGraphic.getWidth()+10)*mobGrid[y].lenght)/2) + x*(mobGraphic.getWidth()+10
+                        new Coordinate(100 + x*30, 50 + y*30));
 
                 //Add mob to mobsAlive
                 this.mobsAlive++;
@@ -50,6 +58,9 @@ public class Map {
      * @param y y-pos
      */
     public void killMob(int x, int y){
+        //Award point to the player before removing the mob
+        //player.points += this.mobGrid[y][x].getValue();
+
         //Remove the mob
         this.mobGrid[y][x] = null;
         this.mobsAlive--;
@@ -67,7 +78,15 @@ public class Map {
         for (int y = 0; y < this.mobGrid.length; y++) {
             for (int x = 0; x < this.mobGrid[y].length; x++) {
                 if(this.mobGrid[y][x] != null){
-                    this.mobGrid[y][x].moveObject(this.mobDirection, time)
+                    if(this.mobGrid[this.mostRightColumn][x].getArea().getTopRightCorner().getX() > 800){ //800 = totalWidth
+                        this.mobDirection = this.mobDirection.invert();
+                        //hoppa ner ett steg
+                    }
+                    else if(this.mobGrid[this.mostLeftColumn][x].getArea().getTopRightCorner().getX() < 0){
+
+                    }
+
+                    this.mobGrid[y][x].moveObject(this.mobDirection, time);
                 }
             }
         }
@@ -102,5 +121,7 @@ public class Map {
     }
 
 
-    
+   public Mob[][] getMobGrid(){
+       return this.mobGrid;
+   }
 }

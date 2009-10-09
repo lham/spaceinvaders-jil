@@ -7,34 +7,17 @@ import java.awt.Graphics2D;
  * @author Jon
  */
 public class Mob extends ViewableObject implements MoveableObject{
-    private int speed;  //The speed in pixels/sec
     private int value; // The amount of points earned by killing the mob
-    private int direction; //The direction of the mob
 
 
-    public Mob(int hight){
-        //constructor
+    public Mob(int valueMultiplier, Coordinate spawnCoord){
+        //Här skall storleken skrivas in (dvs hur stor area moben tar up, ex 20x20 px)
+        //Bör bytas ut mot spawnCoord.getX()+mobGrapic.getWidth();
+        super(new Area(spawnCoord, new Coordinate(spawnCoord.getX()+20, spawnCoord.getY()-20)));
 
-    }
+        //Sätt monstrets poäng
+        this.value = 10 * valueMultiplier;
 
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public int getDirection() {
-        return direction;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
     public int getValue() {
@@ -46,7 +29,7 @@ public class Mob extends ViewableObject implements MoveableObject{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void moveObject(long time) {
+    public void moveObject(Direction dir, long time) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
