@@ -80,10 +80,13 @@ public class Map {
                 if(this.mobGrid[y][x] != null){
                     if(this.mobGrid[this.mostRightColumn][x].getArea().getTopRightCorner().getX() > 800){ //800 = totalWidth
                         this.mobDirection = this.mobDirection.invert();
+
                         //hoppa ner ett steg
+
                     }
                     else if(this.mobGrid[this.mostLeftColumn][x].getArea().getTopRightCorner().getX() < 0){
-
+                        this.mobDirection = this.mobDirection.invert();
+                        //Hoppa ner ett steg
                     }
 
                     this.mobGrid[y][x].moveObject(this.mobDirection, time);
