@@ -14,14 +14,16 @@ public class Game {
     private Map map;
     private LinkedList<Bullet> mobBullets = new LinkedList();
     private PlayerShip ship;
+    private Window win;
     //private Score currentScore;
 
     public void startNewGame(){
         //start game somehow
+        this.win = new Window();
         this.map = new Map();
         this.map.fillMobGrid();
         this.gameloop();
-        this.ship = new PlayerShip();
+        this.ship = new PlayerShip(/*Spawncoord, middle of screen?*/);
     }
 
     public void gameOver(){
@@ -39,7 +41,7 @@ public class Game {
             //Check for killed objects
             int i = 0;
             for (i = 0; i < mobBullets.size(); i++) {
-                 if(Area.areaInArea(mobBullets.get(i).getArea()/*Playership area*/)) {
+                 if(Area.areaInArea(mobBullets.get(i).getArea(), ship.getArea())) {
                     //Bullet collide with plyership
                  }
             }
