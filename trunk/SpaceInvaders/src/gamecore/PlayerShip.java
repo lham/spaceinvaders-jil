@@ -19,10 +19,6 @@ public class PlayerShip extends ViewableObject implements MoveableObject{
         //fire a bullet
     }
 
-    public void moveShip() {
-        //move the ship
-    }
-
     public boolean hasActiveProjectile() {
         return hasActiveProjectile;
     }
