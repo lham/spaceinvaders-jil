@@ -220,7 +220,7 @@ public class Area {
         }
     }
 
-    public static boolean areaInArea(Area areaBullet){
+    public static boolean areaInArea(Area areaBullet, Area areaCollide){
         return true;
     }
 }
