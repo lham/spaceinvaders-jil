@@ -12,7 +12,7 @@ public class PlayerShip extends ViewableObject implements MoveableObject{
     boolean hasActiveProjectile;
 
     public PlayerShip() {
-        //construktor
+        
     }
 
     public void fireBullet() {

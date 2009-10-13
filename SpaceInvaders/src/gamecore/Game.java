@@ -39,15 +39,15 @@ public class Game {
             //Check for killed objects
             int i = 0;
             for (i = 0; i < mobBullets.size(); i++) {
-                 if(Area.areaInArea(mobBullets.get(i).getArea()/*Player area*/)) {
+                 if(Area.areaInArea(mobBullets.get(i).getArea()/*Playership area*/)) {
                     //Bullet collide with plyership
                  }
             }
 
             if(ship.hasActiveProjectile()) {
                 int j = 0;
-                for (j = 0; j < ; j++) {
-                    
+                for (j = 0; j < map.getMobGrid()[j].length; j++) {
+                    if(Area.areaInArea(/*Area player bullet*/map.getMobGrid()[j].getArea()))
                 }
             }
             //if bullet has collided with object => kill object and the bullet
