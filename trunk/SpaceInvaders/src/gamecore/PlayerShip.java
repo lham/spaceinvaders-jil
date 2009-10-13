@@ -11,8 +11,8 @@ public class PlayerShip extends ViewableObject implements MoveableObject{
     private int speed;
     boolean hasActiveProjectile;
 
-    public PlayerShip() {
-        
+    public PlayerShip(Coordinate spawnCoord) {
+        super(new Area(spawnCoord, new Coordinate(spawnCoord.getX(), spawnCoord.getY()))); //will change later to height and width of sprite
     }
 
     public void fireBullet() {
