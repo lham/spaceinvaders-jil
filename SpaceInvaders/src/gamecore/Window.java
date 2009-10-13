@@ -9,10 +9,11 @@ public class Window extends JFrame{
         Window coolboy = new Window(800, 600);
     }
     public Window(int xSize, int ySize) {
+        Game game = new Game();
         setLayout(new FlowLayout());
         getContentPane().setBackground(Color.black);
 
-        JLabel space = new JLabel("SCORE " + Game.score, JLabel.LEFT);
+        JLabel space = new JLabel("SCORE " + game.getScore(), JLabel.LEFT);
         
         space.setOpaque(true);
         add(space);

@@ -15,6 +15,7 @@ public class Game {
     private LinkedList<Bullet> mobBullets = new LinkedList();
     private PlayerShip ship;
     private Window win;
+    private int score;
     //private Score currentScore;
 
     public void startNewGame(){
@@ -69,7 +70,9 @@ public class Game {
         }
     }
 
-
+public int getScore(){
+    return score;
+}
     //Several more methods
 
 
