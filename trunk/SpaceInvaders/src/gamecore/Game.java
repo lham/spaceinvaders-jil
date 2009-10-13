@@ -19,7 +19,7 @@ public class Game {
 
     public void startNewGame(){
         //start game somehow
-        this.win = new Window();
+        this.win = new Window(800, 600);
         this.map = new Map();
         this.map.fillMobGrid();
         this.gameloop();

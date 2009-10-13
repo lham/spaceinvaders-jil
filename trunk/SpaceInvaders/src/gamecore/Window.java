@@ -6,9 +6,9 @@ import javax.swing.*;
 
 public class Window extends JFrame{
     public static void main(String[] arg) {
-        Window coolboy = new Window();
+        Window coolboy = new Window(800, 600);
     }
-    public Window() {
+    public Window(int xSize, int ySize) {
         setLayout(new FlowLayout());
         getContentPane().setBackground(Color.black);
 
@@ -16,7 +16,7 @@ public class Window extends JFrame{
         
         space.setOpaque(true);
         add(space);
-        setSize(800,600);
+        setSize(xSize, ySize);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
