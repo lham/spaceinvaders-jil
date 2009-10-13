@@ -12,7 +12,7 @@ public class Window extends JFrame{
         setLayout(new FlowLayout());
         getContentPane().setBackground(Color.black);
 
-        JLabel space = new JLabel("Space Invaders", JLabel.CENTER);
+        JLabel space = new JLabel("SCORE " + Game.score, JLabel.LEFT);
         
         space.setOpaque(true);
         add(space);
