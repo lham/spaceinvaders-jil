@@ -1,8 +1,6 @@
 package gamecore;
 
 import java.util.LinkedList;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 /**
  *
@@ -18,10 +16,6 @@ public class Game {
     private PlayerShip ship;
     private Window win;
     private int score;
-
-    private boolean leftPressed = false;
-    private boolean rightPressed = false;
-    private boolean firePressed = false;
     //private Score currentScore;
 
     public void startNewGame(){
@@ -85,38 +79,4 @@ public int getScore(){
     return score;
 }
     //Several more methods
-
-private class InputHandler extends KeyAdapter {
-    public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-            leftPressed = true;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            rightPressed = true;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            firePressed = true;
-        }
-    }
-
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                leftPressed = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                rightPressed = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                firePressed = false;
-        }
-    }
-
-    public void keyTyped(KeyEvent e) {
-        if(e.getKeyChar() == 27) {
-            System.exit(0);
-        }
-    }
 }
-}
-
-
