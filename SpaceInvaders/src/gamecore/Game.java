@@ -30,7 +30,7 @@ public class Game {
         this.map = new Map();
         this.map.fillMobGrid();
         this.gameloop();
-        this.ship = new PlayerShip(/*Spawncoord, middle of screen?*/);
+        this.ship = new PlayerShip(new Coordinate(400, 575));
         addKeyListener(new InputHandler());
     }
 

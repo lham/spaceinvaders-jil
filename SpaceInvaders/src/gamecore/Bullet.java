@@ -24,6 +24,7 @@ public class Bullet extends ViewableObject implements MoveableObject{
         return speed;
     }
 
+    @Override
     public Area getArea() {
         return super.getArea();
     }
@@ -32,8 +33,7 @@ public class Bullet extends ViewableObject implements MoveableObject{
     public void drawObject(Graphics2D g) {
         
     }
-
-    public void moveObject(long time) {
+    public void moveObject(Direction dir, long time) {
         super.getArea().moveArea(0, this.speed*time);
     }
 }
