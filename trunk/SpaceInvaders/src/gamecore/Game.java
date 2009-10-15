@@ -1,6 +1,8 @@
 package gamecore;
 
 import java.util.LinkedList;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -16,6 +18,10 @@ public class Game {
     private PlayerShip ship;
     private Window win;
     private int score;
+
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
+    private boolean firePressed = false;
     //private Score currentScore;
 
     public void startNewGame(){
@@ -25,6 +31,7 @@ public class Game {
         this.map.fillMobGrid();
         this.gameloop();
         this.ship = new PlayerShip(/*Spawncoord, middle of screen?*/);
+        addKeyListener(new InputHandler());
     }
 
     public void gameOver(){
@@ -50,9 +57,13 @@ public class Game {
             if(ship.hasActiveProjectile()) {
                 int j = 0;
                 for (j = 0; j < map.getMobGrid()[j].length; j++) {
-                    if(Area.areaInArea(/*Area player bullet*/map.getMobGrid()[j].getArea()))
+                    if(Area.areaInArea(/*Area player bullet*/map.getMobGrid()[j].getArea())) {
+                        
+                    }
                 }
             }
+
+            
             //if bullet has collided with object => kill object and the bullet
             //if bullet outside of screen => remove
 
@@ -75,5 +86,37 @@ public int getScore(){
 }
     //Several more methods
 
+private class InputHandler extends KeyAdapter {
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+            leftPressed = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            rightPressed = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+            firePressed = true;
+        }
+    }
 
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                leftPressed = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                rightPressed = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                firePressed = false;
+        }
+    }
+
+    public void keyTyped(KeyEvent e) {
+        if(e.getKeyChar() == 27) {
+            System.exit(0);
+        }
+    }
 }
+}
+
+
