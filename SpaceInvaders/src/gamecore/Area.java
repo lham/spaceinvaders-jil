@@ -191,6 +191,12 @@ public class Area {
                     new Coordinate(this.topRightCorner.getX() + moveX, this.topRightCorner.getY() + moveY));
     }
 
+        public void moveArea(long moveX, int moveY){
+        this.setArea(
+                    new Coordinate((int) (this.lowLeftCorner.getX() + moveX),this.lowLeftCorner.getY() + moveY),
+                    new Coordinate((int) (this.topRightCorner.getX() + moveX),this.topRightCorner.getY() + moveY));
+    }
+
     private void setArea(Coordinate lowLeftCorner, Coordinate topRightCorner){
         if (lowLeftCorner.getX() <= topRightCorner.getX() && lowLeftCorner.getY() >= topRightCorner.getY()){
             this.lowLeftCorner = lowLeftCorner;
