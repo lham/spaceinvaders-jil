@@ -16,6 +16,7 @@ public class Game {
     private PlayerShip ship;
     private Window win;
     private int score;
+    private InputHandler input;
     //private Score currentScore;
 
     public void startNewGame(){
@@ -25,7 +26,8 @@ public class Game {
         this.map.fillMobGrid();
         this.gameloop();
         this.ship = new PlayerShip(new Coordinate(400, 575));
-        addKeyListener(new InputHandler());
+        this.input = new InputHandler();
+        addKeyListener(this.input);
     }
 
     public void gameOver(){
@@ -40,6 +42,13 @@ public class Game {
             long deltatime = System.currentTimeMillis() - this.lastupdate;
             this.lastupdate = System.currentTimeMillis();
 
+            if((input.getLeftPressed()) && (!input.getRightPressed())) {
+                ship.moveObject(Direction.LEFT, deltatime);
+            }
+            else if((!input.getLeftPressed()) && (input.getRightPressed())) {
+                ship.moveObject(Direction.RIGHT, deltatime);
+            }
+            
             //Check for killed objects
             int i = 0;
             for (i = 0; i < mobBullets.size(); i++) {

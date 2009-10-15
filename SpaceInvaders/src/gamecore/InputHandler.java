@@ -37,4 +37,16 @@ public class InputHandler extends KeyAdapter {
             System.exit(0);
         }
     }
+
+    public boolean getFirePressed() {
+        return firePressed;
+    }
+
+    public boolean getLeftPressed() {
+        return leftPressed;
+    }
+
+    public boolean getRightPressed() {
+        return rightPressed;
+    }
 }
