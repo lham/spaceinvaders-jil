@@ -6,7 +6,7 @@ import java.util.LinkedList;
  *
  * @author Linus
  */
-public class Game {
+    public class Game {
     private int level;
     private int playerLives;
     private long lastupdate;
@@ -24,10 +24,11 @@ public class Game {
         this.win = new Window(800, 600);
         this.map = new Map();
         this.map.fillMobGrid();
-        this.gameloop();
         this.ship = new PlayerShip(new Coordinate(400, 575));
         this.input = new InputHandler();
-        addKeyListener(this.input);
+        win.frame.addKeyListener(this.input);
+
+        this.gameloop();
     }
 
     public void gameOver(){
