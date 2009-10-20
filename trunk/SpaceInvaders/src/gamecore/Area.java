@@ -227,6 +227,16 @@ public class Area {
     }
 
     public static boolean areaInArea(Area areaBullet, Area areaCollide){
-        return true;
+        if (areaBullet.getLowLeftCorner().getX() < areaCollide.getLowLeftCorner().getX() ||
+                areaBullet.getTopRightCorner().getX() > areaCollide.getTopRightCorner().getX()){
+            return false;
+        }
+        else if (areaBullet.getLowLeftCorner().getY() > areaCollide.getLowLeftCorner().getY() ||
+                areaBullet.getTopRightCorner().getX() < areaCollide.getTopRightCorner().getY()){
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
