@@ -151,8 +151,8 @@ public class Map {
         while (true){
             Random generator = new Random();
 
-            int row = generator.nextInt(this.rows - 1);
-            int col = generator.nextInt(this.columns - 1);
+            int row = generator.nextInt(this.rows);
+            int col = generator.nextInt(this.columns);
 
             if (this.mobGrid[row][col] != null){
                 return new int[] {row, col};
