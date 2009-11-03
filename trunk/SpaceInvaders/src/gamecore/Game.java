@@ -139,7 +139,7 @@ public class Game {
         this.input.clearPresses();
         long msgTimeStamp = 0;
 
-        while(this.playerLives > 0){
+        while(this.playerLives > 0 && this.map.getMobsAlive() != 0){
             long deltatime = System.currentTimeMillis() - this.lastupdate;
             this.lastupdate = System.currentTimeMillis();
 
@@ -249,6 +249,9 @@ public class Game {
                             }
                         }
                     }
+                }
+                if (this.map.getMobsAlive() == 0){
+                    this.midScreenMsg = "YOU WON! (moar lvls to come...)";
                 }
             }
 
