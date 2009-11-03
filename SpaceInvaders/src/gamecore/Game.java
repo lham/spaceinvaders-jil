@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.util.LinkedList;
+import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -23,17 +24,20 @@ public class Game {
     
     static public int height = 600;
     static public int width = 800;
-    
+
+    //Spelobject
+    private Map map;
+    private LinkedList<Bullet> mobBullets = new LinkedList();
+    private Bullet playerBullet = null;
+    private PlayerShip ship;
+
     //Spelvariabler
     private int level;
     private int playerLives;
     private long lastupdate;
     private boolean isPaused;
-    private Map map;
-    private LinkedList<Bullet> mobBullets = new LinkedList();
-    private Bullet playerBullet = null;
-    private PlayerShip ship;
     private int score;
+    private int mobBulletFreq;
 
     public Game (){
         //Skapa fönstret (det faktiska fönstren, ramen osv.)
@@ -73,6 +77,12 @@ public class Game {
         //Reseta knappar
         this.input.clearPresses();
 
+        //Sätt spelvariabler
+        this.playerLives = 3;
+        this.score = 0;
+        this.level = 1;
+        this.mobBulletFreq = 3000;
+
         //Skapa ett PlayerShip
         this.ship = new PlayerShip(new Coordinate(Game.width/2, Game.height - 20), "deadlus.png");
         this.ship.getArea().moveArea(-(this.ship.getSprite().getWidth()/2), 0);
@@ -102,16 +112,19 @@ public class Game {
         g.dispose();
         this.strategy.show();
 
-        //Pausa spelet och KÖR
+        //Pausa spelet och vänta på att spelaren ska starta genom keypress
         this.isPaused = false;
-        this.gameloop();
+        
+        while (!this.isPaused){
+            this.gameloop();
+        }
     }
 
 
     public void gameloop(){
         this.lastupdate = System.currentTimeMillis();
 
-        while(!isPaused){
+        while(this.playerLives > 0){
             long deltatime = System.currentTimeMillis() - this.lastupdate;
             this.lastupdate = System.currentTimeMillis();
 
@@ -128,57 +141,81 @@ public class Game {
             }
 
             //Försöker skjuta
-            if (this.input.firePressed() && !this.ship.hasActiveProjectile()){
-                this.playerBullet = 
-                        new Bullet(
-                            Direction.UP,
+            if (this.input.firePressed() && this.playerBullet == null){
+                this.playerBullet = new Bullet(
                             new Coordinate(
                                 this.ship.getArea().getTopRightCorner().getX() - this.ship.getSprite().getWidth()/2,
-                                this.ship.getArea().getTopLeftCorner().getY() - 5),
+                                this.ship.getArea().getTopLeftCorner().getY() - 5
+                            ),
                             "drone.png"
                         );
+
                 this.playerBullet.getArea().moveArea(-this.playerBullet.getSprite().getWidth()/2, 0);
-                this.ship.setActiveProjectile(true);
+
             }
 
 
 
-            
-            //Check for killed objects
-//            int i = 0;
-//            for (i = 0; i < mobBullets.size(); i++) {
-//                 if(Area.areaInArea(mobBullets.get(i).getArea(), ship.getArea())) {
-//                    //Bullet collide with plyership
-//                 }
-//            }
-//
-//            if(ship.hasActiveProjectile()) {
-//                int j = 0;
-//                for (j = 0; j < map.getMobGrid()[j].length; j++) {
-//  //                  if(Area.areaInArea(/*Area player bullet*/map.getMobGrid()[j].getArea())) {
-//
-//                }
-//            }
-            
-
-            
-            //if bullet has collided with object => kill object and the bullet
-            //if bullet outside of screen => remove
-
-            //Move objects
             //------------------------------------------------------------------
-//             this.map.moveAllMobs(deltatime);
+            //Utför datorstyrda operationer
+            //------------------------------------------------------------------
+
+            //Flytta mobsen
+            this.map.moveAllMobs(deltatime);
+
+            //Flytta mobBullets
+            for (int i = 0; i < this.mobBullets.size(); i++){
+                this.mobBullets.get(i).moveObject(Direction.DOWN, deltatime);
+            }
+
+            //Flytta playerBullet
             if (this.playerBullet != null){
                 this.playerBullet.moveObject(Direction.UP, deltatime);
             }
 
-            //for(i=0;i < all active bullets;i++)
-            //      bullets[i].moveObject(deltatime)
+            //Spawna random mobBullet
+            Random generator = new Random();
+
+            if (generator.nextInt(this.mobBulletFreq) == 0){ //Bestäm om det skall spawna ett skott denna loopen
+                int[] where = this.map.getRandomPosition(); //row, col
+                this.mobBullets.add(new Bullet(this.map.getMobGrid()[where[0]][where[1]].getArea().getLowLeftCorner(), "mob.png"));
+            }
 
 
 
+            
+            //------------------------------------------------------------------
+            //Ta bort objekt som kolliderat
+            //------------------------------------------------------------------
+
+            //MobBullets mot kant
+            for (int i = 0; i < this.mobBullets.size(); i++){
+                if (this.mobBullets.get(i).getArea().getLowLeftCorner().getY() >= Game.width){
+                    this.mobBullets.remove(i);
+                }
+            }
+
+            //PlayerBullet mot kant
+            if (this.playerBullet != null){
+                if (this.playerBullet.getArea().getTopRightCorner().getY() <= 0){
+                    this.playerBullet = null;
+                }
+            }
+
+            //MobBullets mot skepp
+//            for (int i = 0; i < this.mobBullets.size(); i++){
+//                //BEEP YOU LOST A LIFE :DD
+//            }
+
+            //PlayerBullet mot mobs
+
+
+
+
+            //------------------------------------------------------------------
             //Rita upp alla objekt
             //------------------------------------------------------------------
+
             //Skapa en g2d
             Graphics2D g = (Graphics2D) this.strategy.getDrawGraphics();
             g.setColor(Color.black);
@@ -188,12 +225,12 @@ public class Game {
             this.ship.drawObject(g);
 
             //Måla ut eventuella Bullets
-            if (this.playerBullet != null){
-                this.playerBullet.drawObject(g);
-            }
-
             for (int i = 0; i < this.mobBullets.size(); i++) {
                 this.mobBullets.get(i).drawObject(g);
+            }
+
+            if (this.playerBullet != null){
+                this.playerBullet.drawObject(g);
             }
 
             //Måla ut mobsen

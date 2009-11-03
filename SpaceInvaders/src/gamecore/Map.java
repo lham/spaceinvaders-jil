@@ -1,5 +1,7 @@
 package gamecore;
 
+import java.util.Random;
+
 /**
  *
  * @author Linus
@@ -46,6 +48,7 @@ public class Map {
      */
     public void fillMobGrid(String imagePath, double spaceMultiplier){
         int spaceToFill = (int) (Game.width * spaceMultiplier);
+        
         //Loopa igenom hela griden
         for (int row = 0; row < this.rows; row++) {
             for (int col = 0; col < this.columns; col++) {
@@ -91,25 +94,25 @@ public class Map {
     }
 
     public void moveAllMobs(long time){
-        //loop thru all positions
-        for (int y = 0; y < this.mobGrid.length; y++) {
-            for (int x = 0; x < this.mobGrid[y].length; x++) {
-                if(this.mobGrid[y][x] != null){
-                    if(this.mobGrid[this.mostRightColumn][x].getArea().getTopRightCorner().getX() > 800){ //800 = totalWidth
-                        this.mobDirection = this.mobDirection.invert();
-
-                        //hoppa ner ett steg
-
-                    }
-                    else if(this.mobGrid[this.mostLeftColumn][x].getArea().getTopRightCorner().getX() < 0){
-                        this.mobDirection = this.mobDirection.invert();
-                        //Hoppa ner ett steg
-                    }
-
-                    this.mobGrid[y][x].moveObject(this.mobDirection, time);
-                }
-            }
-        }
+//        //loop thru all positions
+//        for (int y = 0; y < this.mobGrid.length; y++) {
+//            for (int x = 0; x < this.mobGrid[y].length; x++) {
+//                if(this.mobGrid[y][x] != null){
+//                    if(this.mobGrid[this.mostRightColumn][x].getArea().getTopRightCorner().getX() > 800){ //800 = totalWidth
+//                        this.mobDirection = this.mobDirection.invert();
+//
+//                        //hoppa ner ett steg
+//
+//                    }
+//                    else if(this.mobGrid[this.mostLeftColumn][x].getArea().getTopRightCorner().getX() < 0){
+//                        this.mobDirection = this.mobDirection.invert();
+//                        //Hoppa ner ett steg
+//                    }
+//
+//                    this.mobGrid[y][x].moveObject(this.mobDirection, time);
+//                }
+//            }
+//        }
     }
 
     public void increasePlayerBulletsFired() {
@@ -140,8 +143,20 @@ public class Map {
         return this.timeBuffert;
     }
 
-
-   public Mob[][] getMobGrid(){
+    public Mob[][] getMobGrid(){
        return this.mobGrid;
-   }
+    }
+
+    public int[] getRandomPosition(){
+        while (true){
+            Random generator = new Random();
+
+            int row = generator.nextInt(this.rows - 1);
+            int col = generator.nextInt(this.columns - 1);
+
+            if (this.mobGrid[row][col] != null){
+                return new int[] {row, col};
+            }
+        }
+    }
 }
