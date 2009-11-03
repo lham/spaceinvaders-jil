@@ -75,21 +75,21 @@ public class Map {
     /**
      * Removes a mob from the mobGrid[y][x]
      * @param x x-pos
-     * @param y y-pos
+     * @param y y-pos3
+     * @return Points value of the removed mob
      */
-    public void killMob(int x, int y){
-        //Award point to the player before removing the mob
-        //player.points += this.mobGrid[y][x].getValue();
+    public int killMob(int killRow, int killCol){
+        int value = this.mobGrid[killRow][killCol].getValue();
 
         //Remove the mob
-        this.mobGrid[y][x] = null;
+        this.mobGrid[killRow][killCol] = null;
         this.mobsAlive--;
 
-        //Check if the extreme rows/columns/rows changed
-        //row
-        for (int yy = 0; yy < mobGrid.length; yy++) {
+        return value;
 
-        }
+
+        //Check if the extreme rows/columns/rows changed
+        
 
     }
 

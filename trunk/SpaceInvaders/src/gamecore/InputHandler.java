@@ -7,6 +7,7 @@ public class InputHandler extends KeyAdapter {
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean firePressed = false;
+    private boolean pausePressed = false;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -19,6 +20,10 @@ public class InputHandler extends KeyAdapter {
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             this.firePressed = true;
         }
+        if(e.getKeyCode() == KeyEvent.VK_PAUSE){
+            this.pausePressed = true;
+        }
+
     }
 
     @Override
@@ -31,6 +36,9 @@ public class InputHandler extends KeyAdapter {
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                 this.firePressed = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_PAUSE){
+                this.pausePressed = false;
         }
     }
 
@@ -53,9 +61,14 @@ public class InputHandler extends KeyAdapter {
         return rightPressed;
     }
 
+    public boolean pausePressed(){
+        return this.pausePressed;
+    }
+
     public void clearPresses(){
         this.firePressed = false;
         this.rightPressed = false;
         this.leftPressed = false;
+        this.pausePressed = false;
     }
 }

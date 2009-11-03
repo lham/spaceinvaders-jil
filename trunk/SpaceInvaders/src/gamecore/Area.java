@@ -191,12 +191,6 @@ public class Area {
                     new Coordinate(this.topRightCorner.getX() + moveX, this.topRightCorner.getY() + moveY));
     }
 
-        public void moveArea(long moveX, long moveY){
-        this.setArea(
-                    new Coordinate((int) (this.lowLeftCorner.getX() + moveX),(int) (this.lowLeftCorner.getY() + moveY)),
-                    new Coordinate((int) (this.topRightCorner.getX() + moveX),(int) (this.topRightCorner.getY() + moveY)));
-    }
-
     private void setArea(Coordinate lowLeftCorner, Coordinate topRightCorner){
         if (lowLeftCorner.getX() <= topRightCorner.getX() && lowLeftCorner.getY() >= topRightCorner.getY()){
             this.lowLeftCorner = lowLeftCorner;
@@ -214,7 +208,7 @@ public class Area {
      * @param area The Area in which the Coordinate will be searched for.
      * @return <code>true</code> if the Coordinate is in the Area, otherwise <code>false</code>.
      */
-    public static boolean coordinateInArea(Coordinate coord, Area area){
+    public static boolean coordinateIsInArea(Coordinate coord, Area area){
         if (coord.getX() < area.getLowLeftCorner().getX() || coord.getX() > area.getTopRightCorner().getX()){
             return false;
         }
@@ -226,14 +220,19 @@ public class Area {
         }
     }
 
-    public static boolean areaInArea(Area areaBullet, Area areaCollide){
-        if (areaBullet.getLowLeftCorner().getX() < areaCollide.getLowLeftCorner().getX() ||
-                areaBullet.getTopRightCorner().getX() > areaCollide.getTopRightCorner().getX()){
-            return false;
-        }
-        else if (areaBullet.getLowLeftCorner().getY() > areaCollide.getLowLeftCorner().getY() ||
-                areaBullet.getTopRightCorner().getX() < areaCollide.getTopRightCorner().getY()){
-            return false;
+    /**
+     * Method that checks if the area a1 intersect the area a2.
+     * @param a1 An area.
+     * @param a2 The area a1 will be checked against.
+     * @return <code>true</code> if they intersect, otherwise <code>false</code>
+     */
+    public static boolean areaIntersectArea(Area a1, Area a2){
+        if( !Area.coordinateIsInArea(a1.getLowLeftCorner(), a2) &&
+            !Area.coordinateIsInArea(a1.getLowRightCorner(), a2) &&
+            !Area.coordinateIsInArea(a1.getTopLeftCorner(), a2) &&
+            !Area.coordinateIsInArea(a1.getTopRightCorner(), a2))
+        {
+           return false; 
         }
         else {
             return true;
