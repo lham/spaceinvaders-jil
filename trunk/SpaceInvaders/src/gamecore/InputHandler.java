@@ -8,6 +8,7 @@ public class InputHandler extends KeyAdapter {
     private boolean rightPressed = false;
     private boolean firePressed = false;
 
+    @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             this.leftPressed = true;
@@ -20,6 +21,7 @@ public class InputHandler extends KeyAdapter {
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 this.leftPressed = false;
@@ -32,21 +34,28 @@ public class InputHandler extends KeyAdapter {
         }
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
         if(e.getKeyChar() == 27) {
             System.exit(0);
         }
     }
 
-    public boolean getFirePressed() {
+    public boolean firePressed() {
         return firePressed;
     }
 
-    public boolean getLeftPressed() {
+    public boolean leftPressed() {
         return leftPressed;
     }
 
-    public boolean getRightPressed() {
+    public boolean rightPressed() {
         return rightPressed;
+    }
+
+    public void clearPresses(){
+        this.firePressed = false;
+        this.rightPressed = false;
+        this.leftPressed = false;
     }
 }

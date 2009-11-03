@@ -1,39 +1,21 @@
-
 package gamecore;
 
-import java.awt.Graphics2D;
-
-/**
- *
- * @author Isak
- */
 public class Bullet extends ViewableObject implements MoveableObject{
-    private int speed; 
+    private double speed;
     private Direction direction;
 
-    public Bullet(Direction direction, Coordinate spawnCoord) {
-        //konstruktor
-        super(new Area(spawnCoord, new Coordinate(spawnCoord.getX(), spawnCoord.getY()+5)));
+    public Bullet(Direction direction, Coordinate spawnCoord, String imagePath) {
+        super(spawnCoord, imagePath);
+        this.speed = 0.45;
+        this.direction = direction;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed; //100px/s  0.1px/ms
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    @Override
-    public Area getArea() {
-        return super.getArea();
-    }
-
-    @Override
-    public void drawObject(Graphics2D g) {
-        
-    }
     public void moveObject(Direction dir, long time) {
-        super.getArea().moveArea(0, this.speed*time);
+        if ((dir == Direction.UP) && (this.getArea().getTopRightCorner().getY() - (int)(this.speed*time) > 0)){
+            this.getArea().moveArea(0, (int)(-this.speed*time));
+        }
+        else if ((dir == Direction.DOWN) && (this.getArea().getLowLeftCorner().getY() + (int)(this.speed*time) < Game.height)){
+            this.getArea().moveArea(0, (int)(this.speed*time));
+        }
     }
 }
