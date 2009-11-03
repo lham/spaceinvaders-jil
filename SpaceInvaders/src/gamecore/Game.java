@@ -1,14 +1,9 @@
 package gamecore;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.LinkedList;
-import java.util.Random;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.util.*;
+import javax.swing.*;
 
 
 public class Game {
@@ -38,6 +33,7 @@ public class Game {
     private boolean isPaused;
     private int score;
     private int mobBulletFreq;
+    private String midScreenMsg = "";
 
     public Game (){
         //Skapa fönstret (det faktiska fönstren, ramen osv.)
@@ -108,21 +104,40 @@ public class Game {
             }
         }
 
+        //Måla ut text
+        g.setColor(Color.white);
+
+        g.setFont(new Font("Courier New", Font.PLAIN, 20));
+        g.drawString(Integer.toString(this.score), 5, 25);
+        g.drawString(("Lives: " + this.playerLives), Game.width - g.getFontMetrics().stringWidth(("Lives: " + this.playerLives)) - 5, 25);
+
+        g.setFont(new Font("Courier New", Font.BOLD, 30));
+        g.drawString("Hit your spacebar to start!", (Game.width - g.getFontMetrics().stringWidth("Hit your spacebar to start!"))/2, Game.height-200);
+
         //Genomför alla utmålningar som sparats i g och ändra buffers
         g.dispose();
         this.strategy.show();
 
         //Pausa spelet och vänta på att spelaren ska starta genom keypress
-        this.isPaused = false;
+        this.isPaused = true;
         
-        while (!this.isPaused){
-            this.gameloop();
+        while (true){
+            if (!this.isPaused){
+                this.gameloop();
+            }
+
+            if (this.input.firePressed()){
+                this.isPaused = false;
+            }
+
         }
     }
 
 
     public void gameloop(){
         this.lastupdate = System.currentTimeMillis();
+        this.input.clearPresses();
+        long msgTimeStamp = 0;
 
         while(this.playerLives > 0){
             long deltatime = System.currentTimeMillis() - this.lastupdate;
@@ -176,7 +191,7 @@ public class Game {
             //Spawna random mobBullet
             Random generator = new Random();
 
-            if (generator.nextInt(this.mobBulletFreq) == 0){ //Bestäm om det skall spawna ett skott denna loopen
+            if (generator.nextInt(this.mobBulletFreq) == 0 && this.map.getMobsAlive() != 0){ //Bestäm om det skall spawna ett skott denna loopen
                 int[] where = this.map.getRandomPosition(); //row, col
                 this.mobBullets.add(new Bullet(this.map.getMobGrid()[where[0]][where[1]].getArea().getLowLeftCorner(), "mob.png"));
             }
@@ -203,11 +218,40 @@ public class Game {
             }
 
             //MobBullets mot skepp
-//            for (int i = 0; i < this.mobBullets.size(); i++){
-//                //BEEP YOU LOST A LIFE :DD
-//            }
+            for (int i = 0; i < this.mobBullets.size(); i++){
+                if(Area.areaIntersectArea(this.mobBullets.get(i).getArea(), this.ship.getArea())){
+                    //Ta bort alla bullets
+                    this.playerBullet = null;
+                    this.mobBullets.clear();
+
+                    //Ta bort ett liv
+                    if (--this.playerLives == 0){
+                        this.midScreenMsg = "YOU LOST SUCKER!";
+                        msgTimeStamp = System.currentTimeMillis();
+                    }
+                    else {
+                        this.midScreenMsg = "YOU GOT HIT";
+                        msgTimeStamp = System.currentTimeMillis();
+                    }
+                }
+            }
 
             //PlayerBullet mot mobs
+            if (this.playerBullet != null){
+                for(int row = 0; row < this.map.getRows(); row++){
+                    for (int col = 0; col < this.map.getColumns(); col++){
+                        if (this.map.getMobGrid()[row][col] != null && this.playerBullet != null){
+                            if (Area.areaIntersectArea(this.playerBullet.getArea(), this.map.getMobGrid()[row][col].getArea())){
+                                this.score += this.map.killMob(row, col);
+                                this.playerBullet = null;
+                                this.midScreenMsg = "KILLSHOT";
+                                msgTimeStamp = System.currentTimeMillis();
+                            }
+                        }
+                    }
+                }
+            }
+
 
 
 
@@ -242,11 +286,28 @@ public class Game {
                 }
             }
 
+            //Måla ut top-text
+            g.setColor(Color.white);
+            g.setFont(new Font("Courier New", Font.PLAIN, 20));
+            g.drawString(Integer.toString(this.score), 5, 25);
+            g.drawString(("Lives: " + this.playerLives), Game.width - g.getFontMetrics().stringWidth(("Lives: " + this.playerLives)) - 5, 25);
+
+            //Måla ut combat-text
+            if (this.lastupdate - msgTimeStamp > 300){
+                this.midScreenMsg = "";
+            }
+
+            
+            g.setFont(new Font("Courier New", Font.BOLD, 30));
+            g.drawString(this.midScreenMsg, (Game.width - g.getFontMetrics().stringWidth(this.midScreenMsg))/2, Game.height-200);
+
+
             //Genomför alla utmålningar som sparats i g och ändra buffers
             g.dispose();
             this.strategy.show();
             
         }
+
     }
 
 

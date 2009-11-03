@@ -9,9 +9,6 @@ public class Mob extends ViewableObject implements MoveableObject{
 
 
     public Mob(int valueMultiplier, Coordinate spawnCoord, String imagePath){
-        //Här skall storleken skrivas in (dvs hur stor area moben tar up, ex 20x20 px)
-        //Bör bytas ut mot spawnCoord.getX()+mobGrapic.getWidth();
-        //super(new Area(spawnCoord, new Coordinate(spawnCoord.getX()+20, spawnCoord.getY()-20)));
         super(spawnCoord, imagePath);
 
         //Sätt monstrets poäng
