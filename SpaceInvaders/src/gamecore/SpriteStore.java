@@ -38,7 +38,7 @@ public class SpriteStore {
         try {
             URL url = this.getClass().getClassLoader().getResource(ref);
             if (url == null){
-                this.fail("Can't find ref: " + ref);
+                this.fail("Can't find ref: " + ref + " ..... " );
             }
 
             sourceImage = ImageIO.read(url);
