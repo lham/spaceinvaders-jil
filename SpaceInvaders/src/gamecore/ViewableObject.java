@@ -23,6 +23,9 @@ public abstract class ViewableObject {
                 )
             );
 
+        //Flytta arean i x-led så den blir centrerad över spawnCoordinaten
+        this.area.moveArea(-this.sprite.getWidth()/2, 0);
+
     }
 
     public void drawObject(Graphics2D g){
