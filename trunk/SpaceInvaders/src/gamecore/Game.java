@@ -20,7 +20,7 @@ public class Game {
     static public int height = 600;
     static public int width = 800;
 
-    //Spelobject
+    //Spelobjekt
     private Map map;
     private LinkedList<Bullet> mobBullets = new LinkedList();
     private Bullet playerBullet = null;
@@ -33,11 +33,15 @@ public class Game {
     private boolean isPaused;
     private int score;
     private int mobBulletFreq;
-    private String midScreenMsg = "";
+    private CombatText ct = new CombatText();
+
+    private int framecount;
+    private long fpsStamp;
+    private int fps;
 
     public Game (){
         //Skapa fönstret (det faktiska fönstren, ramen osv.)
-        this.window = new JFrame("Stargate Invaders by Snail, Stravik and the noob");
+        this.window = new JFrame("Stargate Invaders by Snail, Stravik and Jon");
 
         //Skapa Canvasen allting skall ritas upp på
         this.gamearea = new Canvas();
@@ -77,46 +81,15 @@ public class Game {
         this.playerLives = 3;
         this.score = 0;
         this.level = 1;
-        this.mobBulletFreq = 3000;
+        this.mobBulletFreq = 500/this.level; //Kontrollerar hur ofta skott skall spawna ifrån mobsen
+        this.ct.addMessage("Hit your spacebar to start!",true);
 
-        //Skapa ett PlayerShip
+        //Skapa ett PlayerShip & mobs
         this.ship = new PlayerShip(new Coordinate(Game.width/2, Game.height - 20), "deadlus.png");
-        this.ship.getArea().moveArea(-(this.ship.getSprite().getWidth()/2), 0);
+        this.map = new Map(this.level, "al'kesh.png", 0.6);
 
-        //Skapa alla mobs
-        this.map = new Map();
-        this.map.fillMobGrid("al'kesh.png", 0.6);
-
-        //Skapa en g2d
-        Graphics2D g = (Graphics2D) this.strategy.getDrawGraphics();
-        g.setColor(Color.black);
-        g.fillRect(0,0,Game.width,Game.height);
-
-        //Måla ut skeppet
-        this.ship.drawObject(g);
-
-        //Måla ut mobsen
-        for(int row = 0; row < this.map.getRows(); row++){
-            for (int col = 0; col < this.map.getColumns(); col++){
-                if (this.map.getMobGrid()[row][col] != null){
-                    this.map.getMobGrid()[row][col].drawObject(g);
-                }
-            }
-        }
-
-        //Måla ut text
-        g.setColor(Color.white);
-
-        g.setFont(new Font("Courier New", Font.PLAIN, 20));
-        g.drawString(Integer.toString(this.score), 5, 25);
-        g.drawString(("Lives: " + this.playerLives), Game.width - g.getFontMetrics().stringWidth(("Lives: " + this.playerLives)) - 5, 25);
-
-        g.setFont(new Font("Courier New", Font.BOLD, 30));
-        g.drawString("Hit your spacebar to start!", (Game.width - g.getFontMetrics().stringWidth("Hit your spacebar to start!"))/2, Game.height-200);
-
-        //Genomför alla utmålningar som sparats i g och ändra buffers
-        g.dispose();
-        this.strategy.show();
+        //Måla ut allting
+        this.paintObjects();
 
         //Pausa spelet och vänta på att spelaren ska starta genom keypress
         this.isPaused = true;
@@ -129,24 +102,25 @@ public class Game {
             if (this.input.firePressed()){
                 this.isPaused = false;
             }
-
         }
     }
 
 
     public void gameloop(){
         this.lastupdate = System.currentTimeMillis();
+        this.fpsStamp = System.currentTimeMillis();
         this.input.clearPresses();
-        long msgTimeStamp = 0;
+        this.ct.clearMessage();
 
         while(this.playerLives > 0 && this.map.getMobsAlive() != 0){
             long deltatime = System.currentTimeMillis() - this.lastupdate;
             this.lastupdate = System.currentTimeMillis();
 
+            
             //------------------------------------------------------------------
             //Utför operationer utifrån spelarens input
             //------------------------------------------------------------------
-
+            
             //Skeppförflyttning
             if((this.input.leftPressed()) && (!this.input.rightPressed())) {
                 this.ship.moveObject(Direction.LEFT, deltatime);
@@ -164,8 +138,6 @@ public class Game {
                             ),
                             "drone.png"
                         );
-
-                this.playerBullet.getArea().moveArea(-this.playerBullet.getSprite().getWidth()/2, 0);
 
             }
 
@@ -188,13 +160,9 @@ public class Game {
                 this.playerBullet.moveObject(Direction.UP, deltatime);
             }
 
-            //Spawna random mobBullet
-            Random generator = new Random();
-
-            if (generator.nextInt(this.mobBulletFreq) == 0 && this.map.getMobsAlive() != 0){ //Bestäm om det skall spawna ett skott denna loopen
-                int[] where = this.map.getRandomPosition(); //row, col
-                this.mobBullets.add(new Bullet(this.map.getMobGrid()[where[0]][where[1]].getArea().getLowLeftCorner(), "mob.png"));
-            }
+            //Spawna random mobBullet, topskepp, (items?)
+            this.spawnSpecialObjects();
+            
 
 
 
@@ -225,14 +193,11 @@ public class Game {
                     this.mobBullets.clear();
 
                     //Ta bort ett liv
-                    if (--this.playerLives == 0){
-                        this.midScreenMsg = "YOU LOST SUCKER!";
-                        msgTimeStamp = System.currentTimeMillis();
-                    }
-                    else {
-                        this.midScreenMsg = "YOU GOT HIT";
-                        msgTimeStamp = System.currentTimeMillis();
-                    }
+                    if (--this.playerLives == 0)
+                        this.ct.addMessage("YOU LOST SUCKER!",false);
+                    else 
+                        this.ct.addMessage("YOU GOT HIT!",false);
+                    
                 }
             }
 
@@ -244,73 +209,96 @@ public class Game {
                             if (Area.areaIntersectArea(this.playerBullet.getArea(), this.map.getMobGrid()[row][col].getArea())){
                                 this.score += this.map.killMob(row, col);
                                 this.playerBullet = null;
-                                this.midScreenMsg = "KILLSHOT";
-                                msgTimeStamp = System.currentTimeMillis();
+                                this.ct.addMessage("KILLSHOT!",false);
                             }
                         }
                     }
                 }
                 if (this.map.getMobsAlive() == 0){
-                    this.midScreenMsg = "YOU WON! (moar lvls to come...)";
+                    this.ct.addMessage("YOU WON! (moar lvls to come...)",true);
                 }
             }
-
-
-
 
 
             //------------------------------------------------------------------
             //Rita upp alla objekt
             //------------------------------------------------------------------
+            this.paintObjects();
 
-            //Skapa en g2d
-            Graphics2D g = (Graphics2D) this.strategy.getDrawGraphics();
-            g.setColor(Color.black);
-            g.fillRect(0,0,Game.width,Game.height);
+            //Manage fps
+            try { Thread.sleep(10); } catch (Exception e) {}
+            this.framecount++;
 
-            //Måla ut skeppet
-            this.ship.drawObject(g);
-
-            //Måla ut eventuella Bullets
-            for (int i = 0; i < this.mobBullets.size(); i++) {
-                this.mobBullets.get(i).drawObject(g);
+            if (this.lastupdate - this.fpsStamp >= 1000){
+                this.fps = this.framecount;
+                this.framecount = 0;
+                this.fpsStamp = System.currentTimeMillis();
             }
-
-            if (this.playerBullet != null){
-                this.playerBullet.drawObject(g);
-            }
-
-            //Måla ut mobsen
-            for(int row = 0; row < this.map.getRows(); row++){
-                for (int col = 0; col < this.map.getColumns(); col++){
-                    if (this.map.getMobGrid()[row][col] != null){
-                        this.map.getMobGrid()[row][col].drawObject(g);
-                    }
-                }
-            }
-
-            //Måla ut top-text
-            g.setColor(Color.white);
-            g.setFont(new Font("Courier New", Font.PLAIN, 20));
-            g.drawString(Integer.toString(this.score), 5, 25);
-            g.drawString(("Lives: " + this.playerLives), Game.width - g.getFontMetrics().stringWidth(("Lives: " + this.playerLives)) - 5, 25);
-
-            //Måla ut combat-text
-            if (this.lastupdate - msgTimeStamp > 300){
-                this.midScreenMsg = "";
-            }
-
-            
-            g.setFont(new Font("Courier New", Font.BOLD, 30));
-            g.drawString(this.midScreenMsg, (Game.width - g.getFontMetrics().stringWidth(this.midScreenMsg))/2, Game.height-200);
-
-
-            //Genomför alla utmålningar som sparats i g och ändra buffers
-            g.dispose();
-            this.strategy.show();
             
         }
 
+    }
+
+    public void paintObjects(){
+        //Skapa en g2d
+        Graphics2D g = (Graphics2D) this.strategy.getDrawGraphics();
+        g.setColor(Color.black);
+        g.fillRect(0,0,Game.width,Game.height);
+
+        //Måla ut skeppet
+        this.ship.drawObject(g);
+
+        //Måla ut eventuella Bullets
+        for (int i = 0; i < this.mobBullets.size(); i++) {
+            this.mobBullets.get(i).drawObject(g);
+        }
+
+        if (this.playerBullet != null){
+            this.playerBullet.drawObject(g);
+        }
+
+        //Måla ut mobsen
+        for(int row = 0; row < this.map.getRows(); row++){
+            for (int col = 0; col < this.map.getColumns(); col++){
+                if (this.map.getMobGrid()[row][col] != null){
+                    this.map.getMobGrid()[row][col].drawObject(g);
+                }
+            }
+        }
+
+        //Måla ut top-text
+        g.setColor(Color.white);
+        g.setFont(new Font("Courier New", Font.PLAIN, 20));
+        g.drawString(("Score: " + this.score), 5, 25);
+        g.drawString(("Lives: " + this.playerLives), Game.width - g.getFontMetrics().stringWidth(("Lives: " + this.playerLives)) - 5, 25);
+
+        g.drawString(("FPS: " + this.fps), 5, Game.height - 25);
+
+
+        //Måla combat text
+        this.ct.drawCombatText(g, Game.height - 200);
+
+        //Genomför alla utmålningar som sparats i g och ändra buffers
+        g.dispose();
+        this.strategy.show();
+    }
+    
+    public void spawnSpecialObjects(){
+        //Spawna random mob bullet
+        Random generator = new Random();
+        if (generator.nextInt(this.mobBulletFreq) == 0 && this.map.getMobsAlive() != 0){ //Bestäm om det skall spawna ett skott denna loopen
+            int[] pos = this.map.getRandomPosition(); //row, col
+
+            Coordinate spawnCoord = new Coordinate(
+                this.map.getMobGrid()[pos[0]][pos[1]].getArea().getLowRightCorner().getX() - this.map.getMobGrid()[pos[0]][pos[1]].getSprite().getWidth()/2,
+                this.map.getMobGrid()[pos[0]][pos[1]].getArea().getLowRightCorner().getY() - this.map.getMobGrid()[pos[0]][pos[1]].getSprite().getHeight()
+            );
+
+            this.mobBullets.add(new Bullet(spawnCoord, "mob.png"));
+        }
+
+        //Spawna topskepp
+        //todo..
     }
 
 

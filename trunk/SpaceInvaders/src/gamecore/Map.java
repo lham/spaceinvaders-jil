@@ -15,7 +15,7 @@ public class Map {
     private int mostLeftColumn, mostRightColumn, lowestRow;
 
     private Direction mobDirection;
-    private int speed; //px/sek
+    private double speed;
 
 
     private int playerBulletsFired;
@@ -25,14 +25,17 @@ public class Map {
     /**
      * Constuctor
      */
-    public Map(){
+    public Map(int level, String imagePath, double spaceMultiplier){
+        //Sätt variabler
         this.mobsAlive = 0;
         this.mobDirection = Direction.RIGHT; //the direction the mobs move in when the game starts
-        this.playerBulletsFired = 0;
         this.mostLeftColumn = 1;
         this.mostRightColumn = 11;
         this.lowestRow = 5;
-        this.speed = 10;
+        this.speed = level * 0.2;
+
+        //Spawna alla mobs
+        this.fillMobGrid(imagePath, spaceMultiplier);
     }
 
     public int getRows(){
@@ -48,11 +51,10 @@ public class Map {
      */
     public void fillMobGrid(String imagePath, double spaceMultiplier){
         int spaceToFill = (int) (Game.width * spaceMultiplier);
-        
+
         //Loopa igenom hela griden
         for (int row = 0; row < this.rows; row++) {
             for (int col = 0; col < this.columns; col++) {
-
 
                 //Skapa en mob i mitten, 100 pixlar neråt
                 this.mobGrid[row][col] = new Mob((this.rows - row), new Coordinate((Game.width - spaceToFill)/2, 100), imagePath);
@@ -62,9 +64,9 @@ public class Map {
                 int y = row;
 
                 this.mobGrid[row][col].getArea().moveArea(
-                /* x*(mobWidth+padding) */  x*(this.mobGrid[row][col].getSprite().getWidth() + ((spaceToFill) - (this.mobGrid[row][col].getSprite().getWidth() * this.columns)) / 10),
-                /* y*(mobHeight+padding) */ y*(this.mobGrid[row][col].getSprite().getHeight() + 20)
-                        );
+                        this.mobGrid[row][col].getSprite().getWidth()/2 + x*(this.mobGrid[row][col].getSprite().getWidth() + (spaceToFill - this.mobGrid[row][col].getSprite().getWidth()*this.columns)/10),
+                        y*(this.mobGrid[row][col].getSprite().getHeight() + 20)
+                );
 
                 //Add mob to mobsAlive
                 this.mobsAlive++;
