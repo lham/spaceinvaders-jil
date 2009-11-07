@@ -188,7 +188,7 @@ public class Game {
             //MobBullets mot skepp
             for (int i = 0; i < this.mobBullets.size(); i++){
                 if(Area.areaIntersectArea(this.mobBullets.get(i).getArea(), this.ship.getArea())){
-                    //Ta bort alla bullets
+                    //Ta bort alla bullets om man blir träffad
                     this.playerBullet = null;
                     this.mobBullets.clear();
 
@@ -217,6 +217,12 @@ public class Game {
                 if (this.map.getMobsAlive() == 0){
                     this.ct.addMessage("YOU WON! (moar lvls to come...)",true);
                 }
+            }
+
+            //Mobs mot PlayerShip
+            if (this.map.mobsReachedBottom(this.ship.getArea().getTopRightCorner().getY())){
+                this.ct.addMessage("YOU LOST (SHOOT TO KILL NOOB)", true);
+                this.playerLives = 0;
             }
 
 
@@ -258,13 +264,7 @@ public class Game {
         }
 
         //Måla ut mobsen
-        for(int row = 0; row < this.map.getRows(); row++){
-            for (int col = 0; col < this.map.getColumns(); col++){
-                if (this.map.getMobGrid()[row][col] != null){
-                    this.map.getMobGrid()[row][col].drawObject(g);
-                }
-            }
-        }
+        this.map.paintAllMobs(g);
 
         //Måla ut top-text
         g.setColor(Color.white);
