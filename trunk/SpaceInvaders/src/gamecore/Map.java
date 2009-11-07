@@ -1,5 +1,6 @@
 package gamecore;
 
+import java.awt.Graphics2D;
 import java.util.Random;
 
 /**
@@ -12,15 +13,10 @@ public class Map {
     private int columns = 11;
     private Mob mobGrid[][] = new Mob[this.rows][this.columns]; //[rows][columns]
 
-    private int mostLeftColumn, mostRightColumn, lowestRow;
+    private int lowestRow;
 
     private Direction mobDirection;
     private double speed;
-
-
-    private int playerBulletsFired;
-
-    private int timeBuffert;
 
     /**
      * Constuctor
@@ -29,20 +25,11 @@ public class Map {
         //Sätt variabler
         this.mobsAlive = 0;
         this.mobDirection = Direction.RIGHT; //the direction the mobs move in when the game starts
-        this.mostLeftColumn = 1;
-        this.mostRightColumn = 11;
-        this.lowestRow = 5;
-        this.speed = level * 0.2;
+        this.lowestRow = this.rows - 1;
+        this.speed = level * 0.1;
 
         //Spawna alla mobs
         this.fillMobGrid(imagePath, spaceMultiplier);
-    }
-
-    public int getRows(){
-        return this.rows;
-    }
-    public int getColumns(){
-        return this.columns;
     }
 
 
@@ -57,7 +44,7 @@ public class Map {
             for (int col = 0; col < this.columns; col++) {
 
                 //Skapa en mob i mitten, 100 pixlar neråt
-                this.mobGrid[row][col] = new Mob((this.rows - row), new Coordinate((Game.width - spaceToFill)/2, 100), imagePath);
+                this.mobGrid[row][col] = new Mob((this.rows - row), new Coordinate((Game.width - spaceToFill)/2, 100), imagePath, this.speed);
 
                 //Flytta mobben till dess position
                 int x = col;
@@ -74,12 +61,22 @@ public class Map {
         }
     }
 
-    /**
-     * Removes a mob from the mobGrid[y][x]
-     * @param x x-pos
-     * @param y y-pos3
-     * @return Points value of the removed mob
-     */
+   
+    private void updateLowestRow(){
+            int killedColumns = 0;
+
+            for(int col = 0; col < this.columns; col++){
+                if (this.mobGrid[this.lowestRow][col] == null){
+                    killedColumns++;
+                }
+            }
+
+            if (killedColumns == this.columns){
+                this.lowestRow--;
+                this.updateLowestRow(); //Kör metoden igen så vi inte missar att uppdatera en gång till om raden ovanför är borta
+            }
+    }
+
     public int killMob(int killRow, int killCol){
         int value = this.mobGrid[killRow][killCol].getValue();
 
@@ -87,66 +84,92 @@ public class Map {
         this.mobGrid[killRow][killCol] = null;
         this.mobsAlive--;
 
-        return value;
-
-
-        //Check if the extreme rows/columns/rows changed
         
+        //Kolla om vilken som är den lägsta raden
+        if (killRow == this.lowestRow){
+            this.updateLowestRow();
+        }
 
+
+        //uppdatera speed varje gång en mob dör
+         for (int row = 0; row < this.rows; row++) {
+            for (int col = 0; col < this.columns; col++) {
+                if(this.mobGrid[row][col] != null){
+                    this.mobGrid[row][col].setSpeed(this.speed * (1 + this.rows*this.columns/100.0 - this.mobsAlive/100.0));
+                }
+            }
+         }
+
+
+
+
+        //Returnera värdet på den mob vi tog bort
+        return value;
+    }
+    
+    public void paintAllMobs(Graphics2D g){
+        for(int row = 0; row < this.rows; row++){
+            for (int col = 0; col < this.columns; col++){
+                if (this.mobGrid[row][col] != null){
+                    this.mobGrid[row][col].drawObject(g);
+                }
+            }
+        }
     }
 
     public void moveAllMobs(long time){
-//        //loop thru all positions
-//        for (int y = 0; y < this.mobGrid.length; y++) {
-//            for (int x = 0; x < this.mobGrid[y].length; x++) {
-//                if(this.mobGrid[y][x] != null){
-//                    if(this.mobGrid[this.mostRightColumn][x].getArea().getTopRightCorner().getX() > 800){ //800 = totalWidth
-//                        this.mobDirection = this.mobDirection.invert();
-//
-//                        //hoppa ner ett steg
-//
-//                    }
-//                    else if(this.mobGrid[this.mostLeftColumn][x].getArea().getTopRightCorner().getX() < 0){
-//                        this.mobDirection = this.mobDirection.invert();
-//                        //Hoppa ner ett steg
-//                    }
-//
-//                    this.mobGrid[y][x].moveObject(this.mobDirection, time);
-//                }
-//            }
-//        }
-    }
+        boolean jumpDown = false;
 
-    public void increasePlayerBulletsFired() {
-        this.playerBulletsFired++;
-    }
-    
-    public int getLowestRow() {
-        return lowestRow;
-    }
+        //Kolla om vi skall byta riktning
+        searchSwap:
+        for (int row = 0; row < this.rows; row++) {
+            for (int col = 0; col < this.columns; col++) {
+                if(this.mobGrid[row][col] != null){
+                    //Kolla om moben har rört sig utanför skärmen
+                    if(     this.mobGrid[row][col].getArea().getLowLeftCorner().getX()  - (int)(time*this.mobGrid[row][col].getSpeed()) <= 0 ||
+                            this.mobGrid[row][col].getArea().getTopRightCorner().getX() + (int)(time*this.mobGrid[row][col].getSpeed()) >= Game.width){
 
-    public int getMostLeftColumn() {
-        return mostLeftColumn;
-    }
+                        //Byt riktning
+                        this.mobDirection = this.mobDirection.invert();
 
-    public int getMostRightColumn() {
-        return mostRightColumn;
-    }
+                        //Hoppa ner ett steg
+                        jumpDown = true;
 
-    public int getPlayerBulletsFired() {
-        return playerBulletsFired;
+                        //Hoppa ur sökningen
+                        break searchSwap; //breakar ur båda looparna
+                    }
+                }
+            }
+        }
+
+        //Flytta alla mobs
+        for (int row = 0; row < this.rows; row++) {
+            for (int col = 0; col < this.columns; col++) {
+                if(this.mobGrid[row][col] != null){
+                    this.mobGrid[row][col].moveObject(this.mobDirection, time);
+
+                    if (jumpDown){
+                        this.mobGrid[row][col].getArea().moveArea(0, 20);
+                    }
+                }
+            }
+        }
     }
 
     public int getMobsAlive(){
         return this.mobsAlive;
     }
 
-    public int getTimeBuffert(){
-        return this.timeBuffert;
-    }
-
     public Mob[][] getMobGrid(){
        return this.mobGrid;
+    }
+
+    public int getColumns(){
+        return this.columns;
+    }
+
+    public int getRows(){
+        return this.rows;
     }
 
     public int[] getRandomPosition(){
@@ -160,5 +183,17 @@ public class Map {
                 return new int[] {row, col};
             }
         }
+    }
+
+    public boolean mobsReachedBottom(int bottomY){
+        for (int x = 0; x < this.columns; x++){
+            if (this.mobGrid[this.lowestRow][x] != null){
+                if (this.mobGrid[this.lowestRow][x].getArea().getLowLeftCorner().getY() >= bottomY){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
