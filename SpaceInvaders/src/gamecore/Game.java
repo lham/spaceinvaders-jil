@@ -81,7 +81,7 @@ public class Game {
         this.playerLives = 3;
         this.score = 0;
         this.level = 1;
-        this.mobBulletFreq = 500/this.level; //Kontrollerar hur ofta skott skall spawna ifrån mobsen
+        this.mobBulletFreq = 50/this.level; //Kontrollerar hur ofta skott skall spawna ifrån mobsen
         this.ct.addMessage("Hit your spacebar to start!",true);
 
         //Skapa ett PlayerShip & mobs
@@ -215,7 +215,7 @@ public class Game {
                     }
                 }
                 if (this.map.getMobsAlive() == 0){
-                    this.ct.addMessage("YOU WON! (moar lvls to come...)",true);
+                    this.ct.addMessage("YOU WON! (moar lvls to come...?)",true);
                 }
             }
 
@@ -231,7 +231,9 @@ public class Game {
             //------------------------------------------------------------------
             this.paintObjects();
 
+            //------------------------------------------------------------------
             //Manage fps
+            //------------------------------------------------------------------
             try { Thread.sleep(10); } catch (Exception e) {}
             this.framecount++;
 
