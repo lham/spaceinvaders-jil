@@ -121,8 +121,8 @@ public class Map {
             for (int col = 0; col < this.columns; col++) {
                 if(this.mobGrid[row][col] != null){
                     //Kolla om moben har rört sig utanför skärmen
-                    if(     (this.mobGrid[row][col].getArea().getLowLeftCorner().getX()  - (int)(time*this.mobGrid[row][col].getSpeed()) <= 0 && this.mobDirection == Direction.LEFT) ||
-                            (this.mobGrid[row][col].getArea().getTopRightCorner().getX() + (int)(time*this.mobGrid[row][col].getSpeed()) >= Game.width && this.mobDirection == Direction.RIGHT)){
+                    if(     (this.mobGrid[row][col].getArea().getLowLeftCorner().getX()  - (int)(time*this.mobGrid[row][col].getSpeed()) <= 0           && this.mobDirection == Direction.LEFT) ||
+                            (this.mobGrid[row][col].getArea().getTopRightCorner().getX() + (int)(time*this.mobGrid[row][col].getSpeed()) >= Game.width  && this.mobDirection == Direction.RIGHT)){
 
                         //Byt riktning
                         this.mobDirection = this.mobDirection.invert();
