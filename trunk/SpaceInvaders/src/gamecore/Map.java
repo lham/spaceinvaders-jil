@@ -3,10 +3,6 @@ package gamecore;
 import java.awt.Graphics2D;
 import java.util.Random;
 
-/**
- *
- * @author Linus
- */
 public class Map {
     private int mobsAlive;
     private int rows = 5;
@@ -61,20 +57,19 @@ public class Map {
         }
     }
 
-   
     private void updateLowestRow(){
-            int killedColumns = 0;
+        int killedColumns = 0;
 
-            for(int col = 0; col < this.columns; col++){
-                if (this.mobGrid[this.lowestRow][col] == null){
-                    killedColumns++;
-                }
+        for(int col = 0; col < this.columns; col++){
+            if (this.mobGrid[this.lowestRow][col] == null){
+                killedColumns++;
             }
+        }
 
-            if (killedColumns == this.columns){
-                this.lowestRow--;
-                this.updateLowestRow(); //Kör metoden igen så vi inte missar att uppdatera en gång till om raden ovanför är borta
-            }
+        if (killedColumns == this.columns && this.lowestRow > 0){
+            this.lowestRow--;
+            this.updateLowestRow(); //Kör metoden igen så vi inte missar att uppdatera en gång till om raden ovanför är borta
+        }
     }
 
     public int killMob(int killRow, int killCol){
@@ -126,8 +121,8 @@ public class Map {
             for (int col = 0; col < this.columns; col++) {
                 if(this.mobGrid[row][col] != null){
                     //Kolla om moben har rört sig utanför skärmen
-                    if(     this.mobGrid[row][col].getArea().getLowLeftCorner().getX()  - (int)(time*this.mobGrid[row][col].getSpeed()) <= 0 ||
-                            this.mobGrid[row][col].getArea().getTopRightCorner().getX() + (int)(time*this.mobGrid[row][col].getSpeed()) >= Game.width){
+                    if(     (this.mobGrid[row][col].getArea().getLowLeftCorner().getX()  - (int)(time*this.mobGrid[row][col].getSpeed()) <= 0 && this.mobDirection == Direction.LEFT) ||
+                            (this.mobGrid[row][col].getArea().getTopRightCorner().getX() + (int)(time*this.mobGrid[row][col].getSpeed()) >= Game.width && this.mobDirection == Direction.RIGHT)){
 
                         //Byt riktning
                         this.mobDirection = this.mobDirection.invert();
