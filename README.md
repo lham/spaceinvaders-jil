@@ -1,3 +1,3 @@
 **SpaceInvaders clone**
 
-Skriven i gymnasiet 2009 av Jon, Isak och Linus.
+Skriven på Portalens Gymnasium 2009 av Jon, Isak och Linus.
